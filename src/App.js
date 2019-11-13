@@ -20,6 +20,7 @@ const App = () => {
         username,
         password
       });
+      window.localStorage.setItem("loggedBlogappUser", JSON.stringify(user));
       setUser(user);
       setUsername("");
       setPassword("");
@@ -31,6 +32,11 @@ const App = () => {
     }
   };
 
+  const handleLogout = event => {
+    window.localStorage.removeItem("loggedBlogappUser");
+    setUser(null);
+  };
+
   const handleUsernameChange = event => setUsername(event.target.value);
   const handlePasswordChange = event => setPassword(event.target.value);
 
@@ -40,6 +46,15 @@ const App = () => {
     getBlogs();
     setIsLoading(false);
   }, [user]);
+
+  useEffect(() => {
+    const loggedUserJSON = window.localStorage.getItem("loggedBlogappUser");
+    if (loggedUserJSON) {
+      const user = JSON.parse(loggedUserJSON);
+      setUser(user);
+      console.log(`${user.username} is logged in with token: ${user.token}`);
+    }
+  }, []);
 
   const getBlogs = async () => {
     setBlogs(await blogsService.getAll());
@@ -56,7 +71,12 @@ const App = () => {
         />
       ) : (
         <div>
-          <p>{user.name} logged in</p>
+          <div>
+            <p>
+              {user.name} logged in{" "}
+              <button onClick={handleLogout}>logout</button>
+            </p>
+          </div>
           {isLoading === true ? <div>Loading...</div> : <Blogs blogs={blogs} />}
         </div>
       )}
