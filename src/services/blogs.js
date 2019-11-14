@@ -5,6 +5,7 @@ let token = null;
 
 const setToken = newToken => {
   token = `bearer ${newToken}`;
+  console.log("set token!");
 };
 
 const getAll = async () => {

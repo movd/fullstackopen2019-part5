@@ -4,17 +4,24 @@ import React, { useState, useEffect } from "react";
 import LoginForm from "./components/LoginForm";
 import Blogs from "./components/Blogs";
 import NewBlogForm from "./components/NewBlogForm";
+import Notification from "./components/Notification";
 
 const App = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [blogs, setBlogs] = useState([]);
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
   const [url, setUrl] = useState("");
+  const [notification, setNotification] = useState();
+
+  const clearNotification = () => {
+    setTimeout(() => {
+      setNotification(null);
+    }, 5000);
+  };
 
   const handleLogin = async event => {
     event.preventDefault();
@@ -26,13 +33,15 @@ const App = () => {
       });
       window.localStorage.setItem("loggedBlogappUser", JSON.stringify(user));
       setUser(user);
+      blogsService.setToken(user.token);
       setUsername("");
       setPassword("");
     } catch (exception) {
-      setErrorMessage("Wrong credentials");
-      setTimeout(() => {
-        setErrorMessage(null);
-      }, 5000);
+      setNotification({
+        type: "error",
+        message: "wrong username or password"
+      });
+      clearNotification();
     }
   };
 
@@ -49,11 +58,31 @@ const App = () => {
 
   const handleNewBlog = async event => {
     event.preventDefault();
-    const addedBlog = await blogsService.create(
-      { title, author, url },
-      user.token
-    );
-    setBlogs(blogs.concat(addedBlog));
+    try {
+      const addedBlog = await blogsService.create(
+        { title, author, url },
+        user.token
+      );
+      setBlogs(blogs.concat(addedBlog));
+      setNotification({
+        type: "success",
+        message: `A new Blog ${addedBlog.title} by ${addedBlog.author} added`
+      });
+    } catch (error) {
+      if (error.response.data.error) {
+        setNotification({
+          type: "error",
+          message: error.response.data.error
+        });
+      } else {
+        setNotification({
+          type: "error",
+          message: error.message
+        });
+      }
+
+      clearNotification();
+    }
   };
 
   // Only GET blogs when compontents mounts or 'user' state
@@ -80,12 +109,13 @@ const App = () => {
 
   return (
     <div className="App">
+      {notification ? <Notification notification={notification} /> : null}
       {user === null ? (
         <LoginForm
           handleLogin={handleLogin}
           handleUsernameChange={handleUsernameChange}
           handlePasswordChange={handlePasswordChange}
-          errorMessage={errorMessage}
+          // errorMessage={errorMessage}
         />
       ) : (
         <div>
