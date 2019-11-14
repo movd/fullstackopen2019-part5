@@ -3,6 +3,7 @@ import blogsService from "./services/blogs";
 import React, { useState, useEffect } from "react";
 import LoginForm from "./components/LoginForm";
 import Blogs from "./components/Blogs";
+import NewBlogForm from "./components/NewBlogForm";
 
 const App = () => {
   const [username, setUsername] = useState("");
@@ -11,6 +12,9 @@ const App = () => {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [blogs, setBlogs] = useState([]);
+  const [title, setTitle] = useState("");
+  const [author, setAuthor] = useState("");
+  const [url, setUrl] = useState("");
 
   const handleLogin = async event => {
     event.preventDefault();
@@ -39,12 +43,26 @@ const App = () => {
 
   const handleUsernameChange = event => setUsername(event.target.value);
   const handlePasswordChange = event => setPassword(event.target.value);
+  const handleTitleChange = event => setTitle(event.target.value);
+  const handleAuthorChange = event => setAuthor(event.target.value);
+  const handleUrlChange = event => setUrl(event.target.value);
+
+  const handleNewBlog = async event => {
+    event.preventDefault();
+    const addedBlog = await blogsService.create(
+      { title, author, url },
+      user.token
+    );
+    setBlogs(blogs.concat(addedBlog));
+  };
 
   // Only GET blogs when compontents mounts or 'user' state
   useEffect(() => {
-    setIsLoading(true);
-    getBlogs();
-    setIsLoading(false);
+    if (user) {
+      setIsLoading(true);
+      getBlogs();
+      setIsLoading(false);
+    }
   }, [user]);
 
   useEffect(() => {
@@ -52,7 +70,7 @@ const App = () => {
     if (loggedUserJSON) {
       const user = JSON.parse(loggedUserJSON);
       setUser(user);
-      console.log(`${user.username} is logged in with token: ${user.token}`);
+      blogsService.setToken(user.token);
     }
   }, []);
 
@@ -77,6 +95,15 @@ const App = () => {
               <button onClick={handleLogout}>logout</button>
             </p>
           </div>
+          <NewBlogForm
+            handleNewBlog={handleNewBlog}
+            handleTitleChange={handleTitleChange}
+            handleAuthorChange={handleAuthorChange}
+            handleUrlChange={handleUrlChange}
+            title={title}
+            author={author}
+            url={url}
+          />
           {isLoading === true ? <div>Loading...</div> : <Blogs blogs={blogs} />}
         </div>
       )}
