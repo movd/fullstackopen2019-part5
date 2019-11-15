@@ -16,6 +16,7 @@ const App = () => {
   const [author, setAuthor] = useState("");
   const [url, setUrl] = useState("");
   const [notification, setNotification] = useState();
+  const [visibilityNewBlogForm, setVisibilityNewBlogForm] = useState(false);
 
   const clearNotification = () => {
     setTimeout(() => {
@@ -55,6 +56,8 @@ const App = () => {
   const handleTitleChange = event => setTitle(event.target.value);
   const handleAuthorChange = event => setAuthor(event.target.value);
   const handleUrlChange = event => setUrl(event.target.value);
+  const toggleVisibilityChange = event =>
+    setVisibilityNewBlogForm(!visibilityNewBlogForm);
 
   const handleNewBlog = async event => {
     event.preventDefault();
@@ -68,6 +71,7 @@ const App = () => {
         type: "success",
         message: `A new Blog ${addedBlog.title} by ${addedBlog.author} added`
       });
+      clearNotification();
     } catch (error) {
       if (error.response.data.error) {
         setNotification({
@@ -119,21 +123,33 @@ const App = () => {
         />
       ) : (
         <div>
+          <h2>Blogs</h2>
           <div>
             <p>
               {user.name} logged in{" "}
               <button onClick={handleLogout}>logout</button>
             </p>
           </div>
-          <NewBlogForm
-            handleNewBlog={handleNewBlog}
-            handleTitleChange={handleTitleChange}
-            handleAuthorChange={handleAuthorChange}
-            handleUrlChange={handleUrlChange}
-            title={title}
-            author={author}
-            url={url}
-          />
+          {visibilityNewBlogForm ? (
+            <div>
+              <NewBlogForm
+                handleNewBlog={handleNewBlog}
+                handleTitleChange={handleTitleChange}
+                handleAuthorChange={handleAuthorChange}
+                handleUrlChange={handleUrlChange}
+                title={title}
+                author={author}
+                url={url}
+              />
+              <p>
+                <button onClick={toggleVisibilityChange}>cancel</button>
+              </p>
+            </div>
+          ) : (
+            <p>
+              <button onClick={toggleVisibilityChange}>new blog</button>
+            </p>
+          )}
           {isLoading === true ? <div>Loading...</div> : <Blogs blogs={blogs} />}
         </div>
       )}
