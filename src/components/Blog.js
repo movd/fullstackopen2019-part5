@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import blogsService from "../services/blogs";
 import "./Blog.css";
 
-const Blog = ({ blog }) => {
+const Blog = ({ blog, handLikeChange }) => {
   const [visibilityFullBlog, setVisibilityFullBlog] = useState(false);
   const [likes, setLikes] = useState(blog.likes);
 
@@ -21,8 +21,9 @@ const Blog = ({ blog }) => {
       <div>
         {likes} likes{" "}
         <button onClick={() => handleLikeUpdate(blog)}>like</button>
+        {/* <button onClick={handLikeChange}>like</button> */}
       </div>
-      <div>added by {blog.user[0].name}</div>
+      <div>added by {blog.author}</div>
     </div>
   );
 

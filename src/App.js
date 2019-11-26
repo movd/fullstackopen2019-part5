@@ -2,7 +2,7 @@ import loginService from "./services/login";
 import blogsService from "./services/blogs";
 import React, { useState, useEffect } from "react";
 import LoginForm from "./components/LoginForm";
-import Blogs from "./components/Blogs";
+import Blog from "./components/Blog";
 import NewBlogForm from "./components/NewBlogForm";
 import Notification from "./components/Notification";
 
@@ -111,6 +111,27 @@ const App = () => {
     setBlogs(await blogsService.getAll());
   };
 
+  const handLikeChange = async blog => {
+    console.log("clicked on like button in id: ", blog.id);
+    const newLikes = blog.likes + 1;
+    const updateBlog = { ...blog, likes: newLikes };
+    console.log(updateBlog);
+  };
+
+  const renderBlogs = () => {
+    return (
+      <div className="Blogs">
+        {blogs.map(blog => (
+          <Blog
+            key={blog.id}
+            blog={blog}
+            handLikeChange={() => handLikeChange(blog)}
+          />
+        ))}
+      </div>
+    );
+  };
+
   return (
     <div className="App">
       {notification ? <Notification notification={notification} /> : null}
@@ -150,7 +171,11 @@ const App = () => {
               <button onClick={toggleVisibilityChange}>new blog</button>
             </p>
           )}
-          {isLoading === true ? <div>Loading...</div> : <Blogs blogs={blogs} />}
+          {isLoading === true ? (
+            <div>Loading...</div>
+          ) : (
+            <div>{renderBlogs()}</div>
+          )}
         </div>
       )}
     </div>
