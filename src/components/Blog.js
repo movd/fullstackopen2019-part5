@@ -10,9 +10,9 @@ const Blog = ({ blog }) => {
     setVisibilityFullBlog(!visibilityFullBlog);
 
   const handleLikeUpdate = async blog => {
-    let newLikes = likes + 1;
-    // My Backend only accepts likes via PUT
-    await blogsService.like(blog.id, newLikes);
+    const newLikes = likes + 1;
+    const updateBlog = { ...blog, likes: newLikes };
+    await blogsService.like(blog.id, updateBlog);
     setLikes(newLikes);
   };
 
@@ -22,7 +22,7 @@ const Blog = ({ blog }) => {
         {likes} likes{" "}
         <button onClick={() => handleLikeUpdate(blog)}>like</button>
       </div>
-      <div>added by {blog.author}</div>
+      <div>added by {blog.user[0].name}</div>
     </div>
   );
 
