@@ -113,9 +113,18 @@ const App = () => {
 
   const handLikeChange = async blog => {
     console.log("clicked on like button in id: ", blog.id);
-    const newLikes = blog.likes + 1;
-    const updateBlog = { ...blog, likes: newLikes };
-    console.log(updateBlog);
+    // Find Element Index in blogs array (state) by given id
+    const idx = blogs.findIndex(b => b.id === blog.id);
+    // Create copy of blogs
+    let newBlogs = [...blogs];
+    // 1 up for likes
+    const newLikes = blogs[idx].likes + 1;
+    // Update copy of blogs
+    newBlogs[idx] = { ...blogs[idx], likes: newLikes };
+    // Set the updated as the state
+    await blogsService.like(newBlogs[idx].id, newBlogs[idx]);
+
+    setBlogs(newBlogs);
   };
 
   const renderBlogs = () => {

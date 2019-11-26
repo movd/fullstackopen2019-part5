@@ -1,27 +1,16 @@
 import React, { useState } from "react";
-import blogsService from "../services/blogs";
 import "./Blog.css";
 
 const Blog = ({ blog, handLikeChange }) => {
   const [visibilityFullBlog, setVisibilityFullBlog] = useState(false);
-  const [likes, setLikes] = useState(blog.likes);
 
   const toggleVisibilityChange = event =>
     setVisibilityFullBlog(!visibilityFullBlog);
 
-  const handleLikeUpdate = async blog => {
-    const newLikes = likes + 1;
-    const updateBlog = { ...blog, likes: newLikes };
-    await blogsService.like(blog.id, updateBlog);
-    setLikes(newLikes);
-  };
-
   const blogDetails = (
     <div>
       <div>
-        {likes} likes{" "}
-        <button onClick={() => handleLikeUpdate(blog)}>like</button>
-        {/* <button onClick={handLikeChange}>like</button> */}
+        {blog.likes} likes <button onClick={handLikeChange}>like</button>
       </div>
       <div>added by {blog.author}</div>
     </div>
