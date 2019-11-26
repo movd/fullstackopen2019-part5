@@ -112,7 +112,6 @@ const App = () => {
   };
 
   const handLikeChange = async blog => {
-    console.log("clicked on like button in id: ", blog.id);
     // Find Element Index in blogs array (state) by given id
     const idx = blogs.findIndex(b => b.id === blog.id);
     // Create copy of blogs
