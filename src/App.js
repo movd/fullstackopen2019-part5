@@ -108,7 +108,10 @@ const App = () => {
   }, []);
 
   const getBlogs = async () => {
-    setBlogs(await blogsService.getAll());
+    const unsortedBlogs = await blogsService.getAll();
+    const sortedBlogs = unsortedBlogs.sort((a, b) => b.likes - a.likes);
+    //
+    setBlogs(sortedBlogs);
   };
 
   const handLikeChange = async blog => {
@@ -122,7 +125,8 @@ const App = () => {
     newBlogs[idx] = { ...blogs[idx], likes: newLikes };
     // Set the updated as the state
     await blogsService.like(newBlogs[idx].id, newBlogs[idx]);
-
+    // Sort by likes
+    newBlogs.sort((a, b) => b.likes - a.likes);
     setBlogs(newBlogs);
   };
 
