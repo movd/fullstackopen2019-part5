@@ -1,6 +1,6 @@
+import React, { useState, useEffect } from "react";
 import loginService from "./services/login";
 import blogsService from "./services/blogs";
-import React, { useState, useEffect } from "react";
 import LoginForm from "./components/LoginForm";
 import Blog from "./components/Blog";
 import NewBlogForm from "./components/NewBlogForm";
@@ -46,7 +46,7 @@ const App = () => {
     }
   };
 
-  const handleLogout = event => {
+  const handleLogout = () => {
     window.localStorage.removeItem("loggedBlogappUser");
     setUser(null);
   };
@@ -56,7 +56,7 @@ const App = () => {
   const handleTitleChange = event => setTitle(event.target.value);
   const handleAuthorChange = event => setAuthor(event.target.value);
   const handleUrlChange = event => setUrl(event.target.value);
-  const toggleVisibilityChange = event =>
+  const toggleVisibilityChange = () =>
     setVisibilityNewBlogForm(!visibilityNewBlogForm);
 
   const handleNewBlog = async event => {
