@@ -1,18 +1,23 @@
 import React, { useState } from "react";
 import "./Blog.css";
 
-const Blog = ({ blog, handLikeChange }) => {
+const Blog = ({ blog, handLikeChange, handleDeleteBlog }) => {
   const [visibilityFullBlog, setVisibilityFullBlog] = useState(false);
 
   const toggleVisibilityChange = event =>
     setVisibilityFullBlog(!visibilityFullBlog);
+
+  const loggedUserJSON = window.localStorage.getItem("loggedBlogappUser");
 
   const blogDetails = (
     <div>
       <div>
         {blog.likes} likes <button onClick={handLikeChange}>like</button>
       </div>
-      <div>added by {blog.author}</div>
+      <div>added by {blog.user[0].name}</div>
+      {JSON.parse(loggedUserJSON).username === blog.user[0].username ? (
+        <button onClick={handleDeleteBlog}>remove</button>
+      ) : null}
     </div>
   );
 

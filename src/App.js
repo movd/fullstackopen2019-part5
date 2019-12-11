@@ -89,6 +89,28 @@ const App = () => {
     }
   };
 
+  const handleDeleteBlog = async blog => {
+    window.confirm(`remove blog '${blog.title} by ${blog.author}`);
+    const idx = blogs.findIndex(b => b.id === blog.id);
+    let newBlogs = [...blogs];
+    newBlogs.splice(idx, 1);
+    try {
+      await blogsService.remove(blog);
+      setBlogs(newBlogs);
+      setNotification({
+        type: "success",
+        message: `The Blog ${blog.title} by ${blog.author} has been deleted`
+      });
+      clearNotification();
+    } catch (error) {
+      setNotification({
+        type: "error",
+        message: error.message
+      });
+      clearNotification();
+    }
+  };
+
   // Only GET blogs when compontents mounts or 'user' state
   useEffect(() => {
     if (user) {
@@ -138,6 +160,7 @@ const App = () => {
             key={blog.id}
             blog={blog}
             handLikeChange={() => handLikeChange(blog)}
+            handleDeleteBlog={() => handleDeleteBlog(blog)}
           />
         ))}
       </div>
