@@ -10,7 +10,7 @@ const Blog = ({ blog, handLikeChange, handleDeleteBlog }) => {
   const loggedUserJSON = window.localStorage.getItem("loggedBlogappUser");
 
   const blogDetails = (
-    <div>
+    <div className="blog-details">
       <div>
         {blog.likes} likes <button onClick={handLikeChange}>like</button>
       </div>
