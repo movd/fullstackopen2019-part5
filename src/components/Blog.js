@@ -4,8 +4,10 @@ import "./Blog.css";
 const Blog = ({ blog, handLikeChange, handleDeleteBlog }) => {
   const [visibilityFullBlog, setVisibilityFullBlog] = useState(false);
 
-  const toggleVisibilityChange = event =>
+  const toggleVisibilityChange = event => {
+    event.preventDefault();
     setVisibilityFullBlog(!visibilityFullBlog);
+  };
 
   const loggedUserJSON = window.localStorage.getItem("loggedBlogappUser");
 
