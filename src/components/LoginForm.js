@@ -2,35 +2,20 @@ import React from "react";
 
 const LoginForm = ({
   handleLogin,
-  handleUsernameChange,
-  handlePasswordChange,
   username,
   password,
-  errorMessage
 }) => {
   return (
     <div className="LoginForm">
       <h2>log in to application</h2>
-      {errorMessage}
       <form onSubmit={handleLogin}>
         <div>
           username
-          <input
-            type="text"
-            value={username}
-            name="Username"
-            onChange={handleUsernameChange}
-          />
+          <input type="text" {...username} name="Username" />
         </div>
         <div>
           password
-          <input
-            type="password"
-            value={password}
-            name="Password"
-            onChange={handlePasswordChange}
-            autoComplete="on"
-          />
+          <input type="password" {...password} autoComplete="on" />
         </div>
         <button type="submit">login</button>
       </form>

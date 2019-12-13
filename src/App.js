@@ -5,10 +5,11 @@ import LoginForm from "./components/LoginForm";
 import Blog from "./components/Blog";
 import NewBlogForm from "./components/NewBlogForm";
 import Notification from "./components/Notification";
+import { useField } from "./hooks";
 
 const App = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const username = useField("text");
+  const password = useField("password");
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [blogs, setBlogs] = useState([]);
@@ -26,17 +27,14 @@ const App = () => {
 
   const handleLogin = async event => {
     event.preventDefault();
-    console.log("logging in with", username, password);
     try {
       const user = await loginService.login({
-        username,
-        password
+        username: username.value,
+        password: password.value
       });
       window.localStorage.setItem("loggedBlogappUser", JSON.stringify(user));
       setUser(user);
       blogsService.setToken(user.token);
-      setUsername("");
-      setPassword("");
     } catch (exception) {
       setNotification({
         type: "error",
@@ -51,8 +49,6 @@ const App = () => {
     setUser(null);
   };
 
-  const handleUsernameChange = event => setUsername(event.target.value);
-  const handlePasswordChange = event => setPassword(event.target.value);
   const handleTitleChange = event => setTitle(event.target.value);
   const handleAuthorChange = event => setAuthor(event.target.value);
   const handleUrlChange = event => setUrl(event.target.value);
@@ -173,9 +169,8 @@ const App = () => {
       {user === null ? (
         <LoginForm
           handleLogin={handleLogin}
-          handleUsernameChange={handleUsernameChange}
-          handlePasswordChange={handlePasswordChange}
-          // errorMessage={errorMessage}
+          username={username}
+          password={password}
         />
       ) : (
         <div>
