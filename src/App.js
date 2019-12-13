@@ -8,8 +8,8 @@ import Notification from "./components/Notification";
 import { useField } from "./hooks";
 
 const App = () => {
-  const username = useField("text");
-  const password = useField("password");
+  const [username, resetUsername] = useField("text");
+  const [password, resetPassword] = useField("password");
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [blogs, setBlogs] = useState([]);
@@ -35,6 +35,8 @@ const App = () => {
       window.localStorage.setItem("loggedBlogappUser", JSON.stringify(user));
       setUser(user);
       blogsService.setToken(user.token);
+      resetUsername();
+      resetPassword();
     } catch (exception) {
       setNotification({
         type: "error",
