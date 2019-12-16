@@ -8,16 +8,17 @@ import Notification from "./components/Notification";
 import { useField } from "./hooks";
 
 const App = () => {
-  const [username, resetUsername] = useField("text");
-  const [password, resetPassword] = useField("password");
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [blogs, setBlogs] = useState([]);
-  const [title, setTitle] = useState("");
-  const [author, setAuthor] = useState("");
-  const [url, setUrl] = useState("");
   const [notification, setNotification] = useState();
   const [visibilityNewBlogForm, setVisibilityNewBlogForm] = useState(false);
+  // Custom Hooks:
+  const [username, resetUsername] = useField("text");
+  const [password, resetPassword] = useField("password");
+  const [title, resetTitle] = useField("text");
+  const [author, resetAuthor] = useField("text");
+  const [url, resetUrl] = useField("text");
 
   const clearNotification = () => {
     setTimeout(() => {
@@ -51,9 +52,6 @@ const App = () => {
     setUser(null);
   };
 
-  const handleTitleChange = event => setTitle(event.target.value);
-  const handleAuthorChange = event => setAuthor(event.target.value);
-  const handleUrlChange = event => setUrl(event.target.value);
   const toggleVisibilityChange = () =>
     setVisibilityNewBlogForm(!visibilityNewBlogForm);
 
@@ -61,14 +59,22 @@ const App = () => {
     event.preventDefault();
     try {
       const addedBlog = await blogsService.create(
-        { title, author, url },
+        {
+          title: title.value,
+          author: author.value,
+          url: url.value
+        },
         user.token
       );
-      setBlogs(blogs.concat(addedBlog));
+      // Add 'user' object so that Blog compoent gets user directly after its added to state
+      setBlogs(blogs.concat({ ...addedBlog, user: [user] }));
       setNotification({
         type: "success",
         message: `A new Blog ${addedBlog.title} by ${addedBlog.author} added`
       });
+      resetAuthor();
+      resetTitle();
+      resetUrl();
       clearNotification();
     } catch (error) {
       if (error.response.data.error) {
@@ -187,9 +193,6 @@ const App = () => {
             <div>
               <NewBlogForm
                 handleNewBlog={handleNewBlog}
-                handleTitleChange={handleTitleChange}
-                handleAuthorChange={handleAuthorChange}
-                handleUrlChange={handleUrlChange}
                 title={title}
                 author={author}
                 url={url}
