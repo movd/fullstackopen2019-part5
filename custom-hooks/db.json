@@ -9,32 +9,8 @@
       "id": 2
     },
     {
-      "content": "",
+      "content": "just added",
       "id": 3
-    },
-    {
-      "content": "",
-      "id": 4
-    },
-    {
-      "content": "",
-      "id": 5
-    },
-    {
-      "content": "",
-      "id": 6
-    },
-    {
-      "content": "",
-      "id": 7
-    },
-    {
-      "content": "",
-      "id": 8
-    },
-    {
-      "content": "asdasd",
-      "id": 9
     }
   ],
   "persons": [
@@ -42,6 +18,11 @@
       "name": "mluukkai",
       "number": "040-5483923",
       "id": 1
+    },
+    {
+      "name": "darth cool",
+      "number": "123456",
+      "id": 2
     }
   ]
 }

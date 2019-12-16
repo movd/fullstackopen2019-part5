@@ -4,7 +4,8 @@ My submissions for [Full Stack Open 2019 part 5](https://fullstackopen.com/en/pa
 
 ## Solutions
 
-My solutions for exercises 5.1 to 5.20 are in the basdirectory. The solution for 5.21 are in `/custom-hooks`.
+* My solutions for exercises **5.1 to 5.20 are in this [basedirectory](/)**
+* The solution for **5.21 are in [custom-hooks](/custom-hooks)**
 
 ### `npm start`
 
